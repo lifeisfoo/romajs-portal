@@ -2,11 +2,10 @@ export const MeetupArticleLead = `
 fragment MeetupArticleLead on Event{
   id
   title
+  description
+  shortDescription
   dateTime
-  images {
-    id
-    baseUrl
-  }  
+  imageUrl
 }
 `
 export const MeetupArticle = `
@@ -47,10 +46,8 @@ fragment MeetupArticle on Event{
 export const ALL_POSTS_QUERY = `
 ${MeetupArticleLead}
 query ($urlname: String!) {
-  groupByUrlname(urlname: $urlname) {
-    id
-    name
-    pastEvents(input: {first: 1}) {
+  allEvents: groupByUrlname(urlname: $urlname) {
+    pastEvents(input: {first: 3}, sortOrder:DESC) {
       count
       pageInfo {
         endCursor

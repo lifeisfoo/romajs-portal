@@ -1,5 +1,4 @@
-import { initializeGraphQL } from "../lib/graphql-client";
-import graphQLRequest from "../lib/graphql-request";
+
 import App from "../components/app";
 import Header from "../components/header";
 import SocialLinks from "../components/SocialLinks";
@@ -9,29 +8,26 @@ import PostList, {
   GROUP_ID,
 } from "../components/post-list";
 import { ALL_POSTS_QUERY } from "../lib/graphql-queries";
+import { GraphQLClient } from "../lib/graphql-client";
 
-export default function Home() {
+export default function Home({allEvents}) {
+const {pastEvents}=allEvents
   return (
     <App>
       <Header />
-      <PostList />
+      <PostList eventList={pastEvents.edges.map(ee=>ee.node)}/>
       <SocialLinks />
     </App>
   );
 }
 
 export async function getStaticProps() {
-  const client = initializeGraphQL();
-
-  await graphQLRequest(
-    client,
-    ALL_POSTS_QUERY,
-    allPostsQueryOptions(GROUP_ID)
-  );
-
+  const response = await GraphQLClient(ALL_POSTS_QUERY,{urlname:GROUP_ID});
+  const {data}=response
+  const {allEvents} = data
   return {
     props: {
-      initialGraphQLState: client.cache.getInitialState(),
+      allEvents,
     },
     revalidate: 1,
   };

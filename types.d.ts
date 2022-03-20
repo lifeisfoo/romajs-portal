@@ -37,6 +37,8 @@ export type MeetupEventType = {
   title?: string;
   eventUrl: string;
   description?: string;
+  shortDescription?:string
+  imageUrl:string
   dateTime: string;
   duration: string;
   host: MeetupUserType;

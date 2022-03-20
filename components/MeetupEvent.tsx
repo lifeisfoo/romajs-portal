@@ -2,19 +2,18 @@ import { MeetupEventType } from "../types";
 import SocialLinks from "./SocialLinks";
 
 export default function MeetupEvent({ event }: { event: MeetupEventType }) {
-  return null
-  const eventImage = event.images[0];
+console.log(event.description)
   return (
     <li key={event.id}>
       <div className="card">
         <div className="container">
-          <h2>{event.title}</h2>
-          <h5>Architect & Engineer</h5>
+          <h3>{event.title}</h3>
         </div>
         <img
-          src={`${eventImage.baseUrl}/${eventImage.id}/676x380.webp`}
+          src={event.imageUrl}
           alt="Avatar"
         />
+        <p>{event.shortDescription}</p>
       </div>
       <style jsx>{`
         .card {

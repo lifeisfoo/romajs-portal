@@ -7,8 +7,6 @@
     "export": "next build && next export"
   },
   "dependencies": {
-    "graphql-hooks": "^5.1.0",
-    "graphql-hooks-memcache": "^2.1.0",
     "next": "latest",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

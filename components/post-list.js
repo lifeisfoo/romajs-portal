@@ -25,7 +25,6 @@ export default function PostList() {
   if (error) return <ErrorMessage message="Error loading posts." />;
   if (!data) return <div>Loading</div>;
   
-  console.log(data)
   const { groupByUrlname:{pastEvents,upcomingEvents} } = data;
   const allPosts = [];
   const areMorePosts = false;

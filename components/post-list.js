@@ -2,51 +2,9 @@ import { useState } from "react";
 import { useQuery } from "graphql-hooks";
 import ErrorMessage from "./error-message";
 import MeetupEvent from "./MeetupEvent";
-import {MeetupArticle, MeetupArticleLead} from '../lib/graphql-queries'
+import {ALL_POSTS_QUERY} from "../lib/graphql-queries"
 export const GROUP_ID = "RomaJS";
 export const TARGET_EVENT_ID = 284329693;
-
-
-export const ALL_POSTS_QUERY = `
-${MeetupArticleLead}
-query ($urlname: String!) {
-  groupByUrlname(urlname: $urlname) {
-    id
-    name
-    pastEvents(input: {first: 1}) {
-      count
-      pageInfo {
-        endCursor
-      }
-      edges {
-        node {
-    ...MeetupArticleLead
-        }
-      }
-    }
-    upcomingEvents(input: {first: 3}) {
-      count
-      pageInfo {
-        endCursor
-      }
-      edges {
-        node {
-    ...MeetupArticleLead
-        }
-      }
-    }
-  }
-}`
-
-
-export const ALL_POSTS_QUERYs = `
-${MeetupArticle}
-query($eventId: ID!) {
-  event(id: $eventId){
-    ...MeetupArticle
-  }
-}
-`;
 
 export const allPostsQueryOptions = (urlname) => ({
   variables: { urlname },
@@ -67,8 +25,8 @@ export default function PostList() {
   if (error) return <ErrorMessage message="Error loading posts." />;
   if (!data) return <div>Loading</div>;
   
+  console.log(data)
   const { groupByUrlname:{pastEvents,upcomingEvents} } = data;
-  console.log(pastEvents)
   const allPosts = [];
   const areMorePosts = false;
 

@@ -4,11 +4,11 @@ import App from "../components/app";
 import Header from "../components/header";
 import SocialLinks from "../components/SocialLinks";
 import PostList, {
-  ALL_POSTS_QUERY,
   allPostsQueryOptions,
   TARGET_EVENT_ID,
   GROUP_ID,
 } from "../components/post-list";
+import { ALL_POSTS_QUERY } from "../lib/graphql-queries";
 
 export default function Home() {
   return (

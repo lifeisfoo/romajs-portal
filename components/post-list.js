@@ -2,50 +2,54 @@ import { useState } from "react";
 import { useQuery } from "graphql-hooks";
 import ErrorMessage from "./error-message";
 import MeetupEvent from "./MeetupEvent";
-
+import {MeetupArticle, MeetupArticleLead} from '../lib/graphql-queries'
 export const GROUP_ID = "RomaJS";
 export const TARGET_EVENT_ID = 284329693;
 
+
 export const ALL_POSTS_QUERY = `
-query($eventId: ID!) {
-  event(id: $eventId) {
-    title
-    eventUrl
-    description
-    dateTime
-    duration
-    host {
-      id
-      name
-    }
-    images {
-      id
-      baseUrl
-      preview
-    }
-    group {
-      id
-      name
-      urlname
-    }
-    tickets {
+${MeetupArticleLead}
+query ($urlname: String!) {
+  groupByUrlname(urlname: $urlname) {
+    id
+    name
+    pastEvents(input: {first: 1}) {
+      count
+      pageInfo {
+        endCursor
+      }
       edges {
         node {
-          id
-          user {
-            name
-          }
-          createdAt
+    ...MeetupArticleLead
         }
-        cursor
       }
     }
+    upcomingEvents(input: {first: 3}) {
+      count
+      pageInfo {
+        endCursor
+      }
+      edges {
+        node {
+    ...MeetupArticleLead
+        }
+      }
+    }
+  }
+}`
+
+
+export const ALL_POSTS_QUERYs = `
+${MeetupArticle}
+query($eventId: ID!) {
+  event(id: $eventId){
+    ...MeetupArticle
   }
 }
 `;
 
-export const allPostsQueryOptions = (eventId) => ({
-  variables: { eventId },
+export const allPostsQueryOptions = (urlname) => ({
+  variables: { urlname },
   updateData: (prevResult, result) => ({
     ...result,
     allPosts: prevResult
@@ -58,14 +62,14 @@ export default function PostList() {
   const [skip, setSkip] = useState(0);
   const { loading, error, data, refetch } = useQuery(
     ALL_POSTS_QUERY,
-    allPostsQueryOptions(TARGET_EVENT_ID)
+    allPostsQueryOptions(GROUP_ID)
   );
-
   if (error) return <ErrorMessage message="Error loading posts." />;
   if (!data) return <div>Loading</div>;
-
-  const { event } = data;
-  const allPosts = [event, event];
+  
+  const { groupByUrlname:{pastEvents,upcomingEvents} } = data;
+  console.log(pastEvents)
+  const allPosts = [];
   const areMorePosts = false;
 
   if (!allPosts) {

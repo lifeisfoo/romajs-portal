@@ -7,6 +7,7 @@ import PostList, {
   ALL_POSTS_QUERY,
   allPostsQueryOptions,
   TARGET_EVENT_ID,
+  GROUP_ID,
 } from "../components/post-list";
 
 export default function Home() {
@@ -25,7 +26,7 @@ export async function getStaticProps() {
   await graphQLRequest(
     client,
     ALL_POSTS_QUERY,
-    allPostsQueryOptions(TARGET_EVENT_ID)
+    allPostsQueryOptions(GROUP_ID)
   );
 
   return {

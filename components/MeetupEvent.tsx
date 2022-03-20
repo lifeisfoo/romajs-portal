@@ -2,6 +2,7 @@ import { MeetupEventType } from "../types";
 import SocialLinks from "./SocialLinks";
 
 export default function MeetupEvent({ event }: { event: MeetupEventType }) {
+  return null
   const eventImage = event.images[0];
   return (
     <li key={event.id}>

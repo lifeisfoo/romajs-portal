@@ -9,3 +9,6 @@ export const socials = [
     icon: "",
   },
 ];
+
+export const GROUP_ID = "RomaJS";
+export const TARGET_EVENT_ID = 284329693;

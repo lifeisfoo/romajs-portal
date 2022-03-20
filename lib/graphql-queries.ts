@@ -2,12 +2,11 @@ export const MeetupArticleLead = `
 fragment MeetupArticleLead on Event{
   id
   title
-  description
-  shortDescription
   dateTime
-  imageUrl
+  shortDescription
+  eventUrl
 }
-`
+`;
 export const MeetupArticle = `
 fragment MeetupArticle on Event{
   title
@@ -42,15 +41,16 @@ fragment MeetupArticle on Event{
     }
   }
 }
-`
+`;
 export const ALL_POSTS_QUERY = `
 ${MeetupArticleLead}
 query ($urlname: String!) {
   allEvents: groupByUrlname(urlname: $urlname) {
-    pastEvents(input: {first: 3}, sortOrder:DESC) {
+    pastEvents(input: {first: 55}, sortOrder:DESC) {
       count
       pageInfo {
         endCursor
+        startCursor
       }
       edges {
         node {
@@ -58,7 +58,7 @@ query ($urlname: String!) {
         }
       }
     }
-    upcomingEvents(input: {first: 3}) {
+    upcomingEvents(input: {first: 1}) {
       count
       pageInfo {
         endCursor
@@ -70,7 +70,26 @@ query ($urlname: String!) {
       }
     }
   }
-}`
+}`;
+
+export const LAST_UPCOMING_EVENT_QUERY = `
+${MeetupArticle}
+query ($urlname: String!) {
+  allEvents: groupByUrlname(urlname: $urlname) {
+ #   upcomingEvents(input: {first: 1}) {
+  pastEvents(input: {first: 1}) {
+      count
+      pageInfo {
+        endCursor
+      }
+      edges {
+        node {
+    ...MeetupArticle
+        }
+      }
+    }
+  }
+}`;
 
 export const EVENT_BY_EVENTID = `
 ${MeetupArticle}

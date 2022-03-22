@@ -1,32 +1,67 @@
-import App from '../components/app'
-import Header from '../components/header'
+/* eslint-disable @next/next/no-img-element */
 
 export default function About() {
   return (
-    <App>
-      <Header />
-      <article>
-        <h1>The Idea Behind This Example</h1>
-        <p>
-          <a href="https://github.com/nearform/graphql-hooks">GraphQL Hooks</a>{' '}
-          is a library from NearForm that intends to be a minimal hooks-first
-          GraphQL client. Providing it in a way familiar to Apollo users.
+    <main className="max-w-5xl mx-auto pb-10 pt-10">
+      <div className="mt-20 sm:mt-0 text-center">
+        <img
+          className="w-64 h-64 rounded-full mx-auto"
+          src="/logo.jpg"
+          alt=""
+          height={200}
+          width={200}
+        />
+        <h2 className="font-light text-xl my-5">RomaJS</h2>
+        <p className="article-body max-w-lg mx-auto">
+          {" "}
+          - The RomaJS group was{" "}
+          <strong>
+            founded by{" "}
+            <a href="https://twitter.com/gillesruppert">Gilles Ruppert</a>
+          </strong>{" "}
+          back in 2013.
         </p>
-
         <p>
-          This started life as a copy of the `with-apollo` example. We then
-          stripped out Apollo and replaced it with `graphql-hooks`. This was
-          mostly as an exercise in ensuring basic functionality could be
-          achieved in a similar way to Apollo.
+          It is a JavaScript User Group based in the city of Roma, Italia. We
+          discuss and have meetups about JavaScript: server-side, client-side,
+          mobile, HTML5. Anything related JS.
         </p>
-
         <p>
-          You'll see this shares the same{' '}
-          <a href="https://www.graph.cool">graph.cool</a> backend as the Apollo
-          example, this is so you can compare the two side by side. The app
-          itself should also look identical.
+          <strong>
+            We meet every third Wednesday of the month and we coordinate the
+            meeting using the <a href="http://www.meetup.com/RomaJS/">meetup</a>{" "}
+            platform
+          </strong>
+          . Everyone is more than welcome to come to our meeting, we ask you to
+          RSVP just to be sure we will have enough space.
         </p>
-      </article>
-    </App>
-  )
+        <p>
+          During the last years various people have helped keeping the group
+          running:
+        </p>
+        <ul>
+          <li>
+            <a href="https://twitter.com/matteomanchi">Matteo Manchi</a>
+          </li>
+          <li>
+            <a href="https://twitter.com/gabrielem/">Gabriele Marazzi</a>
+          </li>
+          <li>
+            <a href="https://twitter.com/lucalanziani">Luca Lanziani</a>
+          </li>
+        </ul>
+        <p>
+          You can have some taste of our meeting on our official youtube{" "}
+          <a href="https://www.youtube.com/channel/UCFm8OPi5USbFybw9SaTLxeA">
+            channel
+          </a>
+          .
+        </p>
+        <p>
+          For further questions you can contact us using one of our social
+          network profiles.
+        </p>
+      </div>
+    </main>
+  );
 }

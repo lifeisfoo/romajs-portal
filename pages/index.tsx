@@ -1,47 +1,35 @@
-import { GraphQLClient } from "../lib/graphql-client";
-import Header from "../components/Header";
-import SocialLinks from "../components/SocialLinks";
-import { LAST_UPCOMING_EVENT_QUERY } from "../lib/graphql-queries";
-import { GROUP_ID } from "../lib/config";
+import { SocialLinks, HomepageHero, MeetupEvent } from "../components";
+import { getLastUpcomingEvent } from "../lib/graphql-client";
 
-export default function Home() {
+//Template cloned by https://github.com/naxeem/raalhu-blog
+
+export default function Home({ upcomingEvent }) {
   return (
-    <>
-      <Header />
-      <div>
-        <div>
-          <h1>RomaJS</h1>
-          <p>
-            A javascript group meeting in Rome every third Wednesday of the
-            month.
-          </p>
-          <p>
-            Follow our Tech Newsletter:{" "}
-            <a
-              href="http://romajs.us14.list-manage.com/subscribe?u=6cb1a45522d1c092d11e144ae&id=1465710629"
-              title="RomaJS Tech Newsletter subscription link"
-            >
-              Subscribe now
-            </a>
-            !
-          </p>
+    <main className="max-w-5xl mx-auto pb-10 pt-10">
+      <div className="flex flex-wrap overflow-hidden">
+        {upcomingEvent && <MeetupEvent event={upcomingEvent} />}
+        <div className="w-full overflow-hidden md:w-2/6 lg:w-2/6 xl:w-2/6">
+          {/* <!-- sidebar --> */}
         </div>
       </div>
-      <SocialLinks />
-    </>
+      {!upcomingEvent && (
+        <div className="text-center">
+          <HomepageHero />
+        </div>
+      )}
+      <div className="text-center">
+        <SocialLinks />
+      </div>
+    </main>
   );
 }
 
-export async function getStaticProps(context) {
-  const response = await GraphQLClient(LAST_UPCOMING_EVENT_QUERY, {
-    urlname: GROUP_ID,
-  });
-  const { data } = response;
-  const { allEvents } = data;
+export async function getStaticProps() {
+  const response = await getLastUpcomingEvent();
 
   return {
     props: {
-      allEvents,
+      upcomingEvent: response,
     },
     revalidate: 1,
   };

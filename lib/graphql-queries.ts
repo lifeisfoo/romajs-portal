@@ -9,8 +9,10 @@ fragment MeetupArticleLead on Event{
 `;
 export const MeetupArticle = `
 fragment MeetupArticle on Event{
+  id
   title
   eventUrl
+  imageUrl
   description
   dateTime
   duration
@@ -72,19 +74,29 @@ query ($urlname: String!) {
   }
 }`;
 
+export const PAST_EVENT_QUERY = `
+${MeetupArticle}
+query ($urlname: String!,$itemsNum: Int!) {
+  groupByUrlname(urlname: $urlname) {   
+    pastEvents(input: {first: $itemsNum},sortOrder:DESC) {
+      edges {
+        node {
+        ...MeetupArticle
+        }
+      }
+    }
+  }
+}`;
+
 export const LAST_UPCOMING_EVENT_QUERY = `
 ${MeetupArticle}
 query ($urlname: String!) {
-  allEvents: groupByUrlname(urlname: $urlname) {
- #   upcomingEvents(input: {first: 1}) {
-  pastEvents(input: {first: 1}) {
-      count
-      pageInfo {
-        endCursor
-      }
+  groupByUrlname(urlname: $urlname) {   
+    # upcomingEvents(input: {first: 1},sortOrder:DESC) {
+     upcomingEvents: pastEvents(input: {first: 1},sortOrder:DESC) {
       edges {
         node {
-    ...MeetupArticle
+        ...MeetupArticle
         }
       }
     }
@@ -93,9 +105,18 @@ query ($urlname: String!) {
 
 export const EVENT_BY_EVENTID = `
 ${MeetupArticle}
-query($eventId: ID!) {
-  event(id: $eventId){
+query($eventId: ID) {
+  event(id: $eventId) {
     ...MeetupArticle
   }
 }
 `;
+
+export const LAST_MEETUP_COUNT = `
+query ($urlname: String!) {
+  groupByUrlname(urlname: $urlname) {
+    pastEvents(input: {}) {
+        count
+    }
+  }
+}`;

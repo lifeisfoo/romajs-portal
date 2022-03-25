@@ -1,3 +1,4 @@
+import { MeetupEventType } from "../types";
 import {
   EVENT_BY_EVENTID,
   LAST_MEETUP_COUNT,
@@ -5,7 +6,10 @@ import {
   PAST_EVENT_QUERY,
 } from "./graphql-queries";
 
-export async function GraphQLClient(query, variables) {
+export async function GraphQLClient(
+  query: string,
+  variables: { [key: string]: any }
+): Promise<any> {
   const finalQuery = JSON.stringify({
     query,
     variables,
@@ -29,7 +33,7 @@ export async function GraphQLClient(query, variables) {
   return json.data;
 }
 
-export async function getMeetupsCount() {
+export async function getMeetupsCount(): Promise<number> {
   const response = await GraphQLClient(LAST_MEETUP_COUNT, {
     urlname: process.env.MEETUP_GROUP_ID,
   });
@@ -40,7 +44,7 @@ export async function getMeetupsCount() {
   } = response;
   return count;
 }
-export async function getLastUpcomingEvent() {
+export async function getLastUpcomingEvent(): Promise<MeetupEventType> {
   const response = await GraphQLClient(LAST_UPCOMING_EVENT_QUERY, {
     urlname: process.env.MEETUP_GROUP_ID,
   });
@@ -55,7 +59,7 @@ export async function getLastUpcomingEvent() {
   return event;
 }
 
-export async function getAllPastEvents() {
+export async function getAllPastEvents(): Promise<MeetupEventType[]> {
   const itemsNum = await getMeetupsCount();
   const response = await GraphQLClient(PAST_EVENT_QUERY, {
     urlname: process.env.MEETUP_GROUP_ID,
@@ -73,7 +77,7 @@ export async function getAllPastEvents() {
   }));
 }
 
-export async function getEvent(eventID) {
+export async function getEvent(eventID: string): Promise<MeetupEventType> {
   const response = await GraphQLClient(EVENT_BY_EVENTID, {
     eventId: eventID,
   });

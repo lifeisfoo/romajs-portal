@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const { env } = require("process");
 const pino = require("pino");
+const isProd = process.env.NODE_ENV === "production";
 
 const logger = pino({
   transport: {
@@ -20,6 +21,7 @@ module.exports = async (phase, { defaultConfig }) => {
   const nextConfig = {
     /* config options here */
     /** see on https://github.com/vercel/next.js/blob/canary/packages/next/server/config-shared.ts#L68 */
+    assetPrefix: isProd ? "romajs-portal" : "",
   };
   return nextConfig;
 };

@@ -5,11 +5,15 @@ import {
   LAST_UPCOMING_EVENT_QUERY,
   PAST_EVENT_QUERY,
 } from "./graphql-queries";
+import nodeFileCache from "node-file-cache";
+import { env } from "process";
 
-export async function GraphQLClient(
+const cache = nodeFileCache.create();
+
+export async function GraphQLClient<T>(
   query: string,
-  variables: { [key: string]: any }
-): Promise<any> {
+  variables: { [key: string]: unknown }
+): Promise<T> {
   const finalQuery = JSON.stringify({
     query,
     variables,
@@ -33,8 +37,30 @@ export async function GraphQLClient(
   return json.data;
 }
 
+export async function cacheManager<T>(
+  key: string,
+  cb: () => Promise<T>
+): Promise<T> {
+  if (env.CACHE_ENABLED === "0") {
+    return cb();
+  }
+
+  const value = cache.get(key);
+  if (value == undefined) {
+    const result = await cb();
+    cache.set(key, result);
+    return result;
+  }
+  return value;
+}
+
+export async function cachedGetMeetupsCount(): Promise<number> {
+  return cacheManager("mykey", getMeetupsCount);
+}
 export async function getMeetupsCount(): Promise<number> {
-  const response = await GraphQLClient(LAST_MEETUP_COUNT, {
+  const response = await GraphQLClient<{
+    groupByUrlname: { pastEvents: { count: number } };
+  }>(LAST_MEETUP_COUNT, {
     urlname: process.env.MEETUP_GROUP_ID,
   });
   const {
@@ -45,7 +71,9 @@ export async function getMeetupsCount(): Promise<number> {
   return count;
 }
 export async function getLastUpcomingEvent(): Promise<MeetupEventType> {
-  const response = await GraphQLClient(LAST_UPCOMING_EVENT_QUERY, {
+  const response = await GraphQLClient<{
+    groupByUrlname: { upcomingEvents: { edges: { node: MeetupEventType }[] } };
+  }>(LAST_UPCOMING_EVENT_QUERY, {
     urlname: process.env.MEETUP_GROUP_ID,
   });
   const {
@@ -59,9 +87,17 @@ export async function getLastUpcomingEvent(): Promise<MeetupEventType> {
   return event;
 }
 
+export async function cachedGetAllPastEvents(): Promise<MeetupEventType[]> {
+  const allEvent = await cacheManager("tutti", getAllPastEvents);
+  allEvent.map((event) => cache.set(event.id, event));
+  return allEvent;
+}
+
 export async function getAllPastEvents(): Promise<MeetupEventType[]> {
-  const itemsNum = await getMeetupsCount();
-  const response = await GraphQLClient(PAST_EVENT_QUERY, {
+  const itemsNum = await cachedGetMeetupsCount();
+  const response = await GraphQLClient<{
+    groupByUrlname: { pastEvents: { edges: { node: MeetupEventType }[] } };
+  }>(PAST_EVENT_QUERY, {
     urlname: process.env.MEETUP_GROUP_ID,
     itemsNum,
   });
@@ -77,10 +113,18 @@ export async function getAllPastEvents(): Promise<MeetupEventType[]> {
   }));
 }
 
+export async function cachedGetEvent(
+  eventID: string
+): Promise<MeetupEventType> {
+  return cacheManager(eventID, () => getEvent(eventID));
+}
 export async function getEvent(eventID: string): Promise<MeetupEventType> {
-  const response = await GraphQLClient(EVENT_BY_EVENTID, {
-    eventId: eventID,
-  });
+  const response = await GraphQLClient<{ event: MeetupEventType }>(
+    EVENT_BY_EVENTID,
+    {
+      eventId: eventID,
+    }
+  );
   const { event } = response;
   return event;
 }

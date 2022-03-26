@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-export default function About() {
+export default function AboutPage(): JSX.Element {
   return (
     <main className="max-w-5xl mx-auto pb-10 pt-10">
       <div className="mt-20 sm:mt-0 text-center">

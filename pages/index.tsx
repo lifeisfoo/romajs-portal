@@ -1,9 +1,17 @@
+import { GetStaticPropsResult } from "next";
 import { SocialLinks, HomepageHero, MeetupEvent } from "../components";
 import { getLastUpcomingEvent } from "../lib/graphql-client";
+import { MeetupEventType } from "../types";
 
 //Template cloned by https://github.com/naxeem/raalhu-blog
 
-export default function Home({ upcomingEvent }) {
+type HomePageProps = {
+  upcomingEvent?: MeetupEventType;
+};
+
+export default function HomePage({
+  upcomingEvent,
+}: HomePageProps): JSX.Element {
   return (
     <main className="max-w-5xl mx-auto pb-10 pt-10">
       <div className="flex flex-wrap overflow-hidden">
@@ -24,7 +32,9 @@ export default function Home({ upcomingEvent }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getStaticProps(): Promise<
+  GetStaticPropsResult<HomePageProps>
+> {
   const response = await getLastUpcomingEvent();
 
   return {

@@ -25,8 +25,8 @@ export default function MeetupEvent({
               {event.title}
             </h2>
             <span className="text-xs text-gray-800 font-thin block mb-5">
-              {meetupDate.toLocaleDateString()} -{" "}
-              {meetupDate.toLocaleTimeString()}
+              {meetupDate.toLocaleDateString("it-IT")} -{" "}
+              {meetupDate.toLocaleTimeString("it-IT")}
             </span>
             <div className="article-body">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>

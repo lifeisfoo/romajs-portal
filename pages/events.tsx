@@ -1,7 +1,15 @@
+import { GetStaticPropsResult } from "next";
 import { PostList, SocialLinks } from "../components";
-import { getAllPastEvents } from "../lib/graphql-client";
+import { cachedGetAllPastEvents } from "../lib/graphql-client";
+import { MeetupEventType } from "../types";
 
-export default function Events({ allEvents }) {
+type EventsListPageProps = {
+  allEvents: MeetupEventType[];
+};
+
+export default function EventsListPage({
+  allEvents,
+}: EventsListPageProps): JSX.Element {
   return (
     <main className="max-w-5xl mx-auto pb-10 pt-10">
       <PostList eventList={allEvents} />
@@ -10,8 +18,10 @@ export default function Events({ allEvents }) {
   );
 }
 
-export async function getStaticProps() {
-  const response = await getAllPastEvents();
+export async function getStaticProps(): Promise<
+  GetStaticPropsResult<EventsListPageProps>
+> {
+  const response = await cachedGetAllPastEvents();
   return {
     props: {
       allEvents: response,

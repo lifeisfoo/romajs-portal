@@ -1,15 +1,23 @@
+import { GetStaticPropsResult, GetStaticPathsResult } from "next";
 import { MeetupEvent } from "../../components";
-import { getAllPastEvents, getEvent } from "../../lib/graphql-client";
+import {
+  cachedGetAllPastEvents,
+  cachedGetEvent,
+} from "../../lib/graphql-client";
+import { MeetupEventType } from "../../types";
 
-export default function EventPage({ event }) {
+type EventPageProp = {
+  event: MeetupEventType;
+};
+export default function EventPage({ event }: EventPageProp): JSX.Element {
   return (
     <main className="max-w-5xl mx-auto pb-10 pt-10">
       <MeetupEvent event={event} />
     </main>
   );
 }
-export async function getStaticPaths() {
-  const posts = await getAllPastEvents();
+export async function getStaticPaths(): Promise<GetStaticPathsResult> {
+  const posts = await cachedGetAllPastEvents();
   return {
     paths: posts.map(({ id }) => ({
       params: { id },
@@ -17,9 +25,13 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
-export async function getStaticProps({ params }) {
+export async function getStaticProps({
+  params,
+}: {
+  params: { id: string };
+}): Promise<GetStaticPropsResult<EventPageProp>> {
   const { id } = params;
-  const response = await getEvent(id);
+  const response = await cachedGetEvent(id);
   return {
     props: {
       event: response,

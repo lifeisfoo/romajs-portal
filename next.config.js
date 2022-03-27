@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const { env } = require("process");
 const pino = require("pino");
@@ -25,3 +26,5 @@ module.exports = async (phase, { defaultConfig }) => {
   };
   return nextConfig;
 };
+
+``;

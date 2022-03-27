@@ -14,7 +14,7 @@ const logger = pino({
 });
 
 module.exports = async (phase, { defaultConfig }) => {
-  if (env.CACHE_ENABLED === "0") {
+  if (env.CACHE_ENABLED === "1") {
     logger.warn("CACHE DISABLED");
   } else {
     logger.info("CACHE ENABLED");
@@ -22,7 +22,8 @@ module.exports = async (phase, { defaultConfig }) => {
   const nextConfig = {
     /* config options here */
     /** see on https://github.com/vercel/next.js/blob/canary/packages/next/server/config-shared.ts#L68 */
-    assetPrefix: isProd ? "romajs-portal" : "",
+    assetPrefix: isProd ? "/romajs-portal/" : "",
+    basePath: isProd ? "/romajs-portal" : "",
   };
   return nextConfig;
 };

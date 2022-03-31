@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://donkyfronky.github.io/romajs-portal/
+
+# Sitemaps
+Sitemap: https://donkyfronky.github.io/romajs-portal/sitemap.xml

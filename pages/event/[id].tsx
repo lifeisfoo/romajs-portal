@@ -1,4 +1,5 @@
 import { GetStaticPropsResult, GetStaticPathsResult } from "next";
+import Head from "next/head";
 import { MeetupEvent } from "../../components";
 import {
   cachedGetAllPastEvents,
@@ -12,6 +13,9 @@ type EventPageProp = {
 export default function EventPage({ event }: EventPageProp): JSX.Element {
   return (
     <main className="max-w-5xl mx-auto pb-10 pt-10">
+      <Head>
+        <link rel="canonical" href={event.eventUrl} />
+      </Head>
       <MeetupEvent event={event} />
     </main>
   );

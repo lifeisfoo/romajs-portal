@@ -12,6 +12,10 @@ env:
 
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   align-code:
     runs-on: ubuntu-latest

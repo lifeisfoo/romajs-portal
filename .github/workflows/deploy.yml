@@ -47,9 +47,9 @@ jobs:
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_dir: ./out
-  sitemaps:
-    runs-on: ubuntu-latest
 # We'll activate this part when we'll decide domain
+# sitemaps:
+#   runs-on: ubuntu-latest
 # steps:
 #   - name: Google
 #     uses: wei/curl@master

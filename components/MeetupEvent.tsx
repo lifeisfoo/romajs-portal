@@ -5,8 +5,10 @@ import { MeetupEventType } from "../types";
 
 export default function MeetupEvent({
   event,
+  showDescription = true,
 }: {
   event: MeetupEventType;
+  showDescription?: boolean;
 }): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _numberOfPartecipants = event.tickets.edges.length;
@@ -28,18 +30,20 @@ export default function MeetupEvent({
               {meetupDate.toLocaleDateString("it-IT")} -{" "}
               {meetupDate.toLocaleTimeString("it-IT")}
             </span>
-            <div className="article-body">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {event.description}
-              </ReactMarkdown>
-            </div>
+            {showDescription && (
+              <div className="article-body">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {event.description}
+                </ReactMarkdown>
+              </div>
+            )}
             <a
               href={event.eventUrl}
               target="_blank"
               className="readmore"
               rel="noreferrer"
             >
-              Read More...
+              See on Meetup...
             </a>
           </div>
         </div>

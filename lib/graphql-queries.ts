@@ -92,8 +92,9 @@ export const LAST_UPCOMING_EVENT_QUERY = `
 ${MeetupArticle}
 query ($urlname: String!) {
   groupByUrlname(urlname: $urlname) {   
-    # upcomingEvents(input: {first: 1},sortOrder:DESC) {
-     upcomingEvents: pastEvents(input: {first: 1},sortOrder:DESC) {
+    upcomingEvents(input: {first: 1},sortOrder:DESC) {
+    #this rename query is for development only  
+    #upcomingEvents: pastEvents(input: {first: 1},sortOrder:DESC) {
       edges {
         node {
         ...MeetupArticle

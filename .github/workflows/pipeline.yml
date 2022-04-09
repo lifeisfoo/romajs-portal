@@ -77,6 +77,18 @@ jobs:
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_dir: ./out
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: tests
+    if: github.ref == 'refs/heads/main'    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          urls: |
+            https://donkyfronky.github.io/romajs-portal/
+            https://donkyfronky.github.io/romajs-portal/events          
 # We'll activate this part when we'll decide domain
 # sitemaps:
 #   runs-on: ubuntu-latest
